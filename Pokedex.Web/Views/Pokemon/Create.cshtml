@@ -1,0 +1,71 @@
+﻿@model PokemonVM
+@{
+  ViewData["Title"] = "Create";
+  var hasRegions = Model.Regions.Count > 0;
+  var hasTypes = Model.Types.Count > 0;
+}
+
+<h1>Create</h1>
+
+<hr />
+<div class="row">
+  <div class="col-md-4">
+    @if (hasRegions) {
+      @if (hasTypes) {
+        <form asp-action="Create">
+          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+          </div>
+          <div class="form-group mb-3">
+            <label asp-for="Image" class="control-label"></label>
+            <input asp-for="Image" class="form-control" required />
+            <span asp-validation-for="Image" class="text-danger"></span>
+          </div>
+          <div class="form-group mb-3">
+            <select class="form-select form-select" asp-for="RegionId" required>
+              <option selected>Regions...</option>
+              @foreach (var item in Model.Regions) {
+                <option value="@item.Id">@item.Name</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <select class="form-select form-select" asp-for="PrimaryTypeId" required>
+              <option selected>Primary Type...</option>
+              @foreach (var item in Model.Types) {
+                <option value="@item.Id">@item.Name</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <select class="form-select form-select" asp-for="SecondaryTypeId">
+              <option selected>Second Type...</option>
+              @foreach (var item in Model.Types) {
+                <option value="@item.Id">@item.Name</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+          </div>
+        </form>
+      } else {
+        <h3>There are no types to add to a pokemon</h3>
+        <a class="btn btn-primary" asp-action="Create" asp-controller="Type">Create a type</a>
+      }
+    } else {
+      <h3>There are no regions to add to a pokemon</h3>
+      <a class="btn btn-primary" asp-action="Create" asp-controller="Region">Create a region</a>
+    }
+  </div>
+</div>
+
+<div>
+  <a asp-action="Index">Back to List</a>
+</div>
+

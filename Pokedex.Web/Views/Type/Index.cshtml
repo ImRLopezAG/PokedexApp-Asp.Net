@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Application.ViewModels.TypeVM>
+
+@{
+  ViewData["Title"] = "Types";
+  var hasTypes = Model.Count() > 0;
+}
+
+<section class="row">
+<div class="">
+      <h1 class="float-start">Types</h1>
+      <a class='btn btn-primary float-end' asp-action="Create">Create New</a>
+</div>
+  @if (hasTypes) {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            @Html.DisplayNameFor(model => model.Name)
+          </th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model) {
+          <tr>
+            <td>
+              @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td class="">
+              @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }, new {@class="btn btn-info" , style="text-decoration:none"}) 
+            </td>
+            <td>
+              @using (Html.BeginForm("Delete", "Type", FormMethod.Post)) {
+                <input type="hidden" name="id" asp-for="@item.Id" value="@item.Id" /> 
+                <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('are you sure that you want delete this Type : @item.Name')">
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  } else {
+    <h3>There are no Types Create first</h3>
+  }
+
+</section>

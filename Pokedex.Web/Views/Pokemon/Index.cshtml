@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PokemonVM>
+
+@{
+  ViewData["Title"] = "Pokemons";
+  var hasPokemon = Model.Count() > 0;
+}
+
+<section class="row">
+  <div>
+    <h1 class="float-start">Pokemons</h1>
+    <a class='btn btn-primary float-end' asp-action="Create">Create New</a>
+  </div>
+  <hr />
+  @if (hasPokemon) {
+    @foreach (var item in Model) {
+      <div class="card mb-3 col ms-3" style="min-width: 22rem; max-width: 22rem; ">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="@item.Image"
+             class="img-fluid rounded-start imageResponsive pb-2 pt-0" alt="@item.Name">
+          </div>
+          <div class="col-md-8  mb-2">
+            <div class="card-body">
+              <h5 class="card-title">
+                @Html.DisplayFor(modelItem => item.Name)
+              </h5>
+              <p class="card-text">
+                @Html.DisplayFor(modelItem => item.Region)
+              </p>
+              <p class="card-text">
+                <span class="text-muted"> @Html.DisplayFor(modelItem => item.PrimaryType) </span>@if (item.SecondaryType != null) {
+                  <span class="text-muted"> / @Html.DisplayFor(modelItem => item.SecondaryType)</span>
+                }
+              </p>
+              <div class='btn btn-info float-start'>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }, new{ style="text-decoration: none; color:black;" })
+              </div>
+              <form asp-action="Delete">
+                <input type="hidden" name="id" asp-for="@item.Id" value="@item.Id" />
+                <input type="submit" value="Delete" class="btn btn-danger float-end" onclick="return confirm('are you sure that you want delete this pokemon :@item.Name')" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  } else {
+    <h1 class="text-center">No Pokemon Found</h1>
+  }
+
+</section>

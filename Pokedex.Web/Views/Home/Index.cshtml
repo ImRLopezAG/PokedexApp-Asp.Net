@@ -1,0 +1,78 @@
+﻿@model Application.ViewModels.FilterVM
+
+@{
+  ViewData["Title"] = "Pokedex";
+  var hasPokemon = Model.Pokemons.Count() > 0;
+}
+
+<div class="row">
+  <div>
+    <h1 class="float-start">Pokemons</h1>
+    <a class='btn btn-primary float-end' asp-controller="Pokemon" asp-action="Create">Create New</a>
+  </div>
+  <form asp-action="FilterByRegion" class="col-md-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group mb-3">
+      <select class="form-select form-select" onchange="this.form.submit()" asp-for="RegionId">
+        <option selected>Filter By Regions</option>
+        @foreach (var type in Model.Regions) {
+          <option value="@type.Id">@type.Name</option>
+        }
+      </select>
+    </div>
+  </form>
+  <form asp-action="FilterByType" class="col-md-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group mb-3">
+      <select class="form-select form-select" onchange="this.form.submit()" asp-for="TypeId">
+        <option selected>Filter By Types</option>
+        @foreach (var type in Model.Types) {
+          <option value="@type.Id">@type.Name</option>
+        }
+      </select>
+    </div>
+  </form>
+  <form asp-action="FilterByName" class="d-flex col-md-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-auto me-2">
+      <input class="form-control" type="search" placeholder="Search Pokemon" asp-for="Name">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-outline-primary mb-3">Search</button>
+    </div>
+  </form>
+</div>
+
+<section class="row col-md-12">
+  <hr />
+  @if (hasPokemon) {
+    @foreach (var item in Model.Pokemons) {
+      <div class="card mb-3 col ms-3" style="min-width: 22rem; max-width: 22rem; ">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="@item.Image"
+             class="img-fluid rounded-start imageResponsive pb-2 pt-0" alt="@item.Name">
+          </div>
+          <div class="col-md-8  mb-2">
+            <div class="card-body">
+              <h5 class="card-title">
+                @Html.DisplayFor(modelItem => item.Name)
+              </h5>
+              <p class="card-text">
+                @Html.DisplayFor(modelItem => item.Region)
+              </p>
+              <p class="card-text">
+                <span class="text-muted"> @Html.DisplayFor(modelItem => item.PrimaryType) </span>@if (item.SecondaryType != null) {
+                  <span class="text-muted"> / @Html.DisplayFor(modelItem => item.SecondaryType)</span>
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  } else {
+    <h1 class="text-center">No Pokemon Found</h1>
+  }
+
+</section>
